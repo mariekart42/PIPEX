@@ -6,11 +6,14 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 20:31:46 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/11 10:48:45 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/11 18:08:37 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "try.h"
+
+// fork creates a child process that is exactly like the original process
+// only difference is another ID
 
 int main()
 {
