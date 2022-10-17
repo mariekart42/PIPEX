@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 17:11:31 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/11 18:07:11 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/17 11:49:53 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@
 
 int main(int argc, char *argv[], char *const envp[])
 {
-    char *vecs[] = {"ls", "wc", NULL};
-    if(execve("./file",argv, vecs) < 0)
-        printf("rerrorrrr\n");
-    printf("yee\n");
+    // argv[1] is the file we write in terminal after ./program (e.g. infile)
+    execve(argv[1], argv, envp);
 }
 
 
