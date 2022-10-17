@@ -6,11 +6,36 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/17 15:36:21 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/17 21:24:51 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/**
+compares 2 char arrays if one of them is greater, less or equal
+stop point is a fixed variable n
+for extendet ascii using unsigned char
+e.g. 
+"abc" > "aba"   ->    returns 1
+  ""  =  ""     ->    returns 0
+ "a"  < "abc"   ->    returns -1
+*/
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while ((i < n) && (s1[i] != '\0' || s2[i] != '\0'))
+	{
+		if (s1[i] != s2[i])
+		{
+			return ((unsigned char)(s1[i]) - ((unsigned char)s2[i]));
+		}
+	i++;
+	}
+	return (0);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -23,11 +48,22 @@ int	main(int argc, char **argv, char **envp)
 	printf("argv[]: %s\n", argv[0]);
 	printf("argv[]: %s\n", argv[1]);
 	printf("argv[]: %s\n\n", argv[2]);
-	printf("argv[]: %s\n\n", envp[3]);
-	// char *args[]     = { "ls", "-l", "-a", NULL };
-    // char *env_args[] = { "PATH=/bin", "USER=me", NULL };
-
-    execve("/usr/local/bin", argv++, envp);
+	printf("argv[5]: %s\n\n", envp[5]);
+	printf("argv[3]: %s\n\n", envp[3]);
+	// char *args[]     = {"ls", "-l", "-a", NULL };
+    char *env_args[] = { envp[5], envp[3], NULL };
+	// char* arr[] = {"ls", NULL};
+	while(*envp)
+	{
+		if(ft_strncmp(*envp, "HOME", 4) == 0)
+			printf("YES envp[]: %s\n", *envp);
+		else
+			printf("... no, argv: %s\n", *envp);
+		envp++;
+	}
+	// env = { "HOME=/root", "PATH=/bin:/sbin", NULL }
+	execv(env_args, argv+2);
+    // execve("/bin/infile", arr, envp);
     fprintf(stderr, "Oops!\n");
 
 	// if (pipe(p) < 0)
