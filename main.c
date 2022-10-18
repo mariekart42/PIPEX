@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/17 21:24:51 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/18 11:28:53 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,28 @@ int	main(int argc, char **argv, char **envp)
 	int		p[2];
 	char	buff[20];
 	// len of argv[2]
-	int32_t len_argv_2 = strlen(argv[1]);
-	// printf("len of argv[1]: %lu\n", strlen(argv[1]));
-	printf("argv[]: %s\n", argv[0]);
-	printf("argv[]: %s\n", argv[1]);
-	printf("argv[]: %s\n\n", argv[2]);
-	printf("argv[5]: %s\n\n", envp[5]);
-	printf("argv[3]: %s\n\n", envp[3]);
+	// int32_t len_argv_2 = strlen(argv[1]);
+	// // printf("len of argv[1]: %lu\n", strlen(argv[1]));
+	// printf("argv[]: %s\n", argv[0]);
+	// printf("argv[]: %s\n", argv[1]);
+	// printf("argv[]: %s\n\n", argv[2]);
+	// printf("argv[5]: %s\n\n", envp[5]);
+	// printf("argv[3]: %s\n\n", envp[3]);
 	// char *args[]     = {"ls", "-l", "-a", NULL };
-    char *env_args[] = { envp[5], envp[3], NULL };
+    // char *env_args[] = { envp[5], envp[3], NULL };
 	// char* arr[] = {"ls", NULL};
-	while(*envp)
-	{
-		if(ft_strncmp(*envp, "HOME", 4) == 0)
-			printf("YES envp[]: %s\n", *envp);
-		else
-			printf("... no, argv: %s\n", *envp);
-		envp++;
-	}
+	// while(*envp)
+	// {
+	// 	if(ft_strncmp(*envp, "HOME", 4) == 0)
+	// 		printf("YES envp[]: %s\n", *envp);
+	// 	else
+	// 		printf("... no, argv: %s\n", *envp);
+	// 	envp++;
+	// }
 	// env = { "HOME=/root", "PATH=/bin:/sbin", NULL }
-	execv(env_args, argv+2);
-    // execve("/bin/infile", arr, envp);
+	printf("printf permission: %d\n\n",access("/usr/local/bin/", R_OK));
+	execv("/Users/mmensing/Desktop/42/PIPEX/ls", argv+2);
+    // execve("usr/local/bin/ls", argv, envp);
     fprintf(stderr, "Oops!\n");
 
 	// if (pipe(p) < 0)
