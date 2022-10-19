@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/18 11:28:53 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/19 20:10:27 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ int	main(int argc, char **argv, char **envp)
 	int		id;
 	int		p[2];
 	char	buff[20];
+	char	*args;
+	
+	args = malloc()
 	// len of argv[2]
 	// int32_t len_argv_2 = strlen(argv[1]);
+	
 	// // printf("len of argv[1]: %lu\n", strlen(argv[1]));
 	// printf("argv[]: %s\n", argv[0]);
 	// printf("argv[]: %s\n", argv[1]);
@@ -62,8 +66,24 @@ int	main(int argc, char **argv, char **envp)
 	// 	envp++;
 	// }
 	// env = { "HOME=/root", "PATH=/bin:/sbin", NULL }
-	printf("printf permission: %d\n\n",access("/usr/local/bin/", R_OK));
-	execv("/Users/mmensing/Desktop/42/PIPEX/ls", argv+2);
+	
+	printf("printf permission: %d\n\n", access("/bin/ls", F_OK | X_OK));
+	// array that you pass to the execve has only the argumentes you want to execute
+	// bsp arg[0] = ls, arg[1] = -l, arg[2] = NULL
+	// same thing for the second arg array i guess
+	
+	// checking path:
+	// with "env | grep PATH" you get your current path
+	// eg.: PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+	// now check validity for each part of the path (execve doesnt know where we are)
+	// eg. it could be path: "/usr/local/bin"
+	// if this is not valid we iterate through the next one and check for vality
+	// eg access("/usr/bin")
+	// if thats still not valit access("/bin") and so on
+	// at the end always append the first argument of your command 
+	// eg if arg[0] = "ls", => access("/bin/ls");
+	
+	execv("/bin/ls", argv+1);
     // execve("usr/local/bin/ls", argv, envp);
     fprintf(stderr, "Oops!\n");
 
