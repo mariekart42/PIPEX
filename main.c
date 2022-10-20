@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/19 20:10:27 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/20 19:20:36 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	while ((i < n) && (s1[i] != '\0' || s2[i] != '\0'))
 	{
 		if (s1[i] != s2[i])
-		{
 			return ((unsigned char)(s1[i]) - ((unsigned char)s2[i]));
-		}
 	i++;
 	}
 	return (0);
 }
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -44,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	char	buff[20];
 	char	*args;
 	
-	args = malloc()
+	// args = malloc()
 	// len of argv[2]
 	// int32_t len_argv_2 = strlen(argv[1]);
 	
@@ -68,9 +67,11 @@ int	main(int argc, char **argv, char **envp)
 	// env = { "HOME=/root", "PATH=/bin:/sbin", NULL }
 	
 	printf("printf permission: %d\n\n", access("/bin/ls", F_OK | X_OK));
+	
 	// array that you pass to the execve has only the argumentes you want to execute
 	// bsp arg[0] = ls, arg[1] = -l, arg[2] = NULL
 	// same thing for the second arg array i guess
+	
 	
 	// checking path:
 	// with "env | grep PATH" you get your current path
@@ -79,9 +80,11 @@ int	main(int argc, char **argv, char **envp)
 	// eg. it could be path: "/usr/local/bin"
 	// if this is not valid we iterate through the next one and check for vality
 	// eg access("/usr/bin")
-	// if thats still not valit access("/bin") and so on
-	// at the end always append the first argument of your command 
+	// if thats still not valid access("/bin") and so on
+	// at the end always append the first argument of the command 
 	// eg if arg[0] = "ls", => access("/bin/ls");
+	
+	search_path()
 	
 	execv("/bin/ls", argv+1);
     // execve("usr/local/bin/ls", argv, envp);
