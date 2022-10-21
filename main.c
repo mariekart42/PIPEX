@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 11:43:36 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/21 18:59:13 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,42 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-void attach_cmd(t_path *x)
+// function attaches the first command in either **cmd_1
+// or **cmd_2 at the end of the given path separated by a '/'
+// character
+char  *attach_cmd(t_path *x, char *cmd)
 {
-	int i = 0;
+	int32_t	i;
+	int32_t	n;
+	int32_t	k;
+	char	*tmp_file;
+	
+	i = 0;
+	n = 0;
+	k = 0;
+	// i is len of path
 	while (x->path[i] != '\0')
 		i++;
-	ft_strlen()
+	// k is the len of the first argument
+	while (cmd[k] != '\0')
+		k++;
+	tmp_file = malloc(i + k + 1);
+	while (x->path[n] != '\0')
+	{
+		tmp_file[n] = x->path[n];
+		n++;
+	}
+	i = 0;
+	tmp_file[n++] = '/';
+	while (cmd[i] != '\0')
+	{
+		tmp_file[n] = cmd[i];
+		i++;
+		n++;
+	}
+	tmp_file[n] = '\0';
+	free(x->path);
+	return (tmp_file);
 }
 
 // function frees 2d array
@@ -61,6 +91,7 @@ void free_2d(char **array)
 	free(array);
 }
 
+
 	// checking path:
 	// with "env | grep PATH" you get your current path
 	// eg.: PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
@@ -69,8 +100,6 @@ void free_2d(char **array)
 	// if this is not valid we iterate through the next one and check for vality
 	// eg access("/usr/bin")
 	// if thats still not valid access("/bin") and so on
-	// at the end always append the first argument of the command 
-	// eg if arg[0] = "ls", => access("/bin/ls");
 void get_path(char **envp, t_path *x)
 {
 	int	i;
@@ -88,28 +117,54 @@ void get_path(char **envp, t_path *x)
 	// printf("path: %s\n", splitted_path[i]);
 	x->path = splitted_path[i];
 	free_2d(splitted_path);
-	attach_cmd(x);
 }
 
 
 int	main(int argc, char **argv, char **envp)
 {
-	// int		id;
+	int		id;
 	// int		p[2];
 	// char	buff[20];
 	// char	*args;
 	argc++;
 	t_path	x;
 	
-	// assigning all commands of argv[2] into 2d array
-	x.cmd_1 = ft_split(argv[2], ' ');
+	
+	//	BEFORE FORK
+
 	
 	// function assigns accessable path from envp to x.path of t_path struct
-	// also assigns first command at the end
 	get_path(envp, &x);
 	
+	// printf("argv[3]: %s\n", argv[3]);
+	// FORK:
+	id = fork();
 	
-	assign_first_cmd(argv, &x);
+	// PARENT
+	if (id != 0)
+	{
+		// assigning all commands of argv[3] into 2d array cmd_2
+		x.cmd_2 = ft_split(argv[3], ' ');
+		
+		// attach first argument to the end of path
+		x.infile_path = attach_cmd(&x, x.cmd_1);
+
+	}
+	// CHILD
+	if (id == 0)
+	{
+		// assigning all commands of argv[2] into 2d array cmd_1
+		x.cmd_1 = ft_split(argv[2], ' ');
+		// attach first argument to the end of path
+		x.outfile_path = attach_cmd(&x, x.cmd_2);
+
+	}
+	
+	
+	
+	// // assigns first command at the end
+	// assign_first_cmd(argv, &x);
+	
 	// execle(x.path, )
 	exit (0);
 	
