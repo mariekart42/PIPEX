@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 18:59:13 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/21 21:04:41 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,12 +122,31 @@ void get_path(char **envp, t_path *x)
 
 int	main(int argc, char **argv, char **envp)
 {
+	int infile;
+	int outfile;
+	// open both files
+	// infile we only need to read from
+	infile = open(ag[1], O_RDONLY);
+	// outfile we need read and write, gets created if it doesnt exist,
+	// O_TRUNC -> if it exist, lengh will get truncated to 0
+	// 0644 -> not really sure, delete in the end if not needed
+	outfile = open(ag[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (infile < 0 || outfile < 0)
+	{
+		perror("open files: ");
+		return (-1);
+	}
+	int32_t p[2];
 	int		id;
-	// int		p[2];
-	// char	buff[20];
-	// char	*args;
 	argc++;
 	t_path	x;
+	
+	// creating pipe:
+	// p[0] is the reading end, so the parent cause it needs to read the passed 
+	//	command from the child to execute it
+	// p[1] is the writing end, so the cild writes to the parent the command
+	//	that the parent needs to execute
+	pipe(p);
 	
 	
 	//	BEFORE FORK
@@ -144,10 +163,10 @@ int	main(int argc, char **argv, char **envp)
 	if (id != 0)
 	{
 		// assigning all commands of argv[3] into 2d array cmd_2
-		x.cmd_2 = ft_split(argv[3], ' ');
+		(*x).cmd_2 = ft_split(argv[3], ' ');
 		
 		// attach first argument to the end of path
-		x.infile_path = attach_cmd(&x, x.cmd_1);
+		(*x).infile_path = attach_cmd(&x, (*x).cmd_1);
 
 	}
 	// CHILD
@@ -156,7 +175,7 @@ int	main(int argc, char **argv, char **envp)
 		// assigning all commands of argv[2] into 2d array cmd_1
 		x.cmd_1 = ft_split(argv[2], ' ');
 		// attach first argument to the end of path
-		x.outfile_path = attach_cmd(&x, x.cmd_2);
+		x.outfile_path = attach_cmd(&x, (*x).cmd_2);
 
 	}
 	

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 13:28:00 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/21 20:56:27 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ typedef struct	s_path
 
 # include <ctype.h>
 # include <stdlib.h>
-# include <stdbool.h>
+# include <stdbool.h> // bool stuff
 # include <limits.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
-# include <errno.h>
 # include <stddef.h>
 # include <stdint.h>
+#include <errno.h> // perror handling
 
 void get_path(char **envp, t_path *x);
 
