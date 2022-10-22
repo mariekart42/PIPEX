@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 21:04:41 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/22 15:51:36 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void free_2d(char **array)
 	// if this is not valid we iterate through the next one and check for vality
 	// eg access("/usr/bin")
 	// if thats still not valid access("/bin") and so on
-void get_path(char **envp, t_path *x)
+void get_path(char **envp, t_path *x, ...)
 {
 	int	i;
 	char	**splitted_path;
@@ -118,7 +118,8 @@ void get_path(char **envp, t_path *x)
 	x->path = splitted_path[i];
 	free_2d(splitted_path);
 }
-
+ft_printf(char* t, ...);
+printf("%d %d", int, int);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -172,71 +173,33 @@ int	main(int argc, char **argv, char **envp)
 	// CHILD
 	if (id == 0)
 	{
-		// assigning all commands of argv[2] into 2d array cmd_1
-		x.cmd_1 = ft_split(argv[2], ' ');
-		// attach first argument to the end of path
-		x.outfile_path = attach_cmd(&x, (*x).cmd_2);
+	//	FIRST CHILD
+		// we execute the command not 'on' the stuff in the terminal, but on file1 (->infile)
+		// for this we redirect stdin to infile
+		// -> dup2(infile, stdin);
+		// instead of printing the output of the first cmd now to the terminal (stdout), we redirect (via fd)
+		// the output to file2 (->outfile)
+		// -> dup2(p[1], stdout);
+		// p[1] here is our write end, so we dont need the read end
+		// -> close(p[0]);
+		// now we can execute the cmd1
+		// -> find valid path
+		// -> create argument_list
+		// execve(valid_path, argument_list, envp);
+	
+	//	SECOND CHILD
+		// instead of outputting the result from our exeve in our terminal, we want it in file2(->outfile)
+		// -> dup2(outfile, stdout);
+		// and because the execve function needs something to read from we have to tell it, that the
+		// reading stuff is not in the terminal but at the end of the pipe that we created in child1
+		// so we change stdin to the end of the pipe (p[0])
+		// -> dup2(p[0], stdin);
+		// now we have to find the valid path ('again' cause child 2 doesnt know anything whats happening in child1 
+		//  (or can we wait for child1 and the stuff will be in our struct?))
+		// in the end find args and do execve
 
 	}
 	
-	
-	
-	// // assigns first command at the end
-	// assign_first_cmd(argv, &x);
-	
-	// execle(x.path, )
 	exit (0);
-	
 
-	
-	// char *args[]     = {"ls", "-l", "-a", NULL };
-    // char *env_args[] = { envp[5], envp[3], NULL };
-	// char* arr[] = {"ls", NULL};
-	// while(*envp)
-	// {
-	// 	if(ft_strncmp(*envp, "HOME", 4) == 0)
-	// 		printf("YES envp[]: %s\n", *envp);
-	// 	else
-	// 		printf("... no, argv: %s\n", *envp);
-	// 	envp++;
-	// }
-	// env = { "HOME=/root", "PATH=/bin:/sbin", NULL }
-	
-
-	// strerror()
-	// perror("dumm");
-	
-	printf("printf permission: %d\n\n", access("/usr/bin/ls", F_OK | X_OK));
-	
-	// array that you pass to the execve has only the argumentes you want to execute
-	// bsp arg[0] = ls, arg[1] = -l, arg[2] = NULL
-	// same thing for the second arg array i guess
-	
-	
-
-	
-	// search_path()
-	
-	execv("/bin/ls", argv+1);
-    // execve("usr/local/bin/ls", argv, envp);
-    fprintf(stderr, "Oops!\n");
-
-	// if (pipe(p) < 0)
-	// 	exit (1);
-	// id = fork();
-	// if (id > 0)
-	// {
-	// 	printf("here speaks your parent\nID: %d\n", id);
-	// 	// writing lol into the pipe
-	// 	write(p[1], argv[1], len_argv_2 + 1);
-	// 	// write(2, argv[1], 10);
-	// 	// wait(NULL); // dunno about this
-	// }
-	// else
-	// {
-	// 	printf("\n\nhere speakes your child\nID: %d\n", id);
-	// 	// reading from the pipe
-	// 	read(p[0], buff, len_argv_2 + 1);
-	// 	printf("printing from pipe: %s\n", buff);
-	// }
 }
