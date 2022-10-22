@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 20:56:27 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/22 17:57:09 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 
 typedef struct	s_path
 {
-	char	*path;
-	char	*outfile_path;
+	// // fd of both files
+	// int32_t	infile;
+	// int32_t	outfile;
+	
+	// // read and write end of pipe
+	// int32_t	p[2];
+	
+	char	*valid_path;
 	char	*infile_path;
+	char	*outfile_path;
 	char	**cmd_1;
 	char	**cmd_2;
+	char	**my_envp;
 	struct s_list *next;
 }				t_path;
 
@@ -32,7 +40,13 @@ typedef struct	s_path
 # include <string.h>
 # include <stddef.h>
 # include <stdint.h>
-#include <errno.h> // perror handling
+
+// perror handling
+#include <errno.h> 
+
+// open function
+#include <sys/stat.h>
+#include <fcntl.h>
 
 void get_path(char **envp, t_path *x);
 
