@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 10:35:45 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/21 11:07:22 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 17:16:12 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @return The array of new strings resulting from the split.
  * NULL if the allocation fails.
  */
-static char	*sub_dup(const char *str, int start, int finish)
+char	*sub_dup(const char *str, int start, int finish)
 {
 	char	*word;
 	int		i;
@@ -39,7 +39,7 @@ static char	*sub_dup(const char *str, int start, int finish)
 	return (word);
 }
 
-static int	amount_subs(const char *s, char c)
+int	amount_subs(const char *s, char c)
 {
 	int		i;
 	int		subs;

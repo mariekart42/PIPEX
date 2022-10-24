@@ -1,14 +1,18 @@
 NAME= pipex.a
 
 CC = gcc
-#CFLAGS= -Wall -Werror -Wextra -g
+CFLAGS= -Wall -Werror -Wextra -g
 HEADER= pipex.h
 RM= rm -rf
 NAME = pipex
 #DEBUG = -fsanitize=address
 
 FILES=	main.c \
-		ft_split.c
+		ft_split.c \
+		extra_funcs.c \
+		path.c \
+		pipex.c \
+		error.c
 
 O_FILES= $(FILES:%.c=%.o)
 
