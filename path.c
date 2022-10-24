@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:11:11 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 17:51:42 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,15 @@ char    *get_path(char **envp)
     // printf("splitted_path[]: %s\n", splitted_path[2]);
     // printf("get path check\n");
 	i = 0;
-	while (access(splitted_path[i], F_OK | X_OK) != 0)
+	while (access(splitted_path[i], F_OK | X_OK) != 0 && splitted_path != NULL)
 		i++;
+	if (splitted_path == NULL)
+		error_msg("unable to find valid path\n");
     valid_path = malloc(ft_strlen(splitted_path[i]) + 1);
 	valid_path = ft_strdup(splitted_path[i]);
 	free_2d(splitted_path);
+	if (valid_path == NULL)
+		error_msg("unable to find valid path\n");
     return (valid_path);
 }
 
@@ -89,5 +93,7 @@ char  *attach_cmd(char *valid_path, char **cmd)
 	tmp_file[n] = '\0';
     // printf("tmp_file: %s\n", tmp_file);
     free(valid_path);
+	if (tmp_file == NULL)
+		error_msg("unable to create path\n");
 	return (tmp_file);
 }

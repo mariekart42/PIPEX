@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:14:32 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 17:30:16 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,7 @@ int	main(int argc, char *argv[], char **envp)
 
 
 
-	// int32_t	outfile;
-	
-	// // outfile we need read and write, gets created if it doesnt exist,
-	// // O_TRUNC -> if it exist, lengh will get truncated to 0
-	// // 0644 -> not really sure, delete in the end if not needed
-	// outfile = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	// if (outfile < 0)
-	// {
-	// 	perror("open outfile: ");
-	// 	return (-1);
-	// }
+
 	
 	
 	return (0);

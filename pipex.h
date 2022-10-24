@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:15:57 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 17:26:01 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ char  *attach_cmd(char *valid_path, char **cmd);
 
 
 //		PIPEX.C
-void pipex(int file[], int pipe[], char **argv, char **envp);
-// void	second_process(int32_t outfile, int p[], t_path *x);
-void	first_process(int file[], int pipe[], char **envp, char **argv);
+void pipex(int32_t file[], int32_t pipe[], char **argv, char **envp);
+void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
+void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 
 
 //	INCLUDE LATER LIBFT
 //		FT_SPLIT.C
-char	*sub_dup(const char *str, int start, int finish);
+char	*sub_dup(const char *str, int32_t start, int32_t finish);
 int	amount_subs(const char *s, char c);
 char	**ft_split(char const *s, char c);
 size_t	ft_strlen(const char *str);
