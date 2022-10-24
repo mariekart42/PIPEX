@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:30:16 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 23:10:04 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int argc, char *argv[], char **envp)
 	//	that the parent needs to execute
 	if (pipe(pipe_) < 0)
 		error_msg("failed to open pipe!\n");
-	
 
 	pipex(file, pipe_, argv, envp);
 

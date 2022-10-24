@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:51:42 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 22:57:58 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char    *get_path(char **envp)
 	free_2d(splitted_path);
 	if (valid_path == NULL)
 		error_msg("unable to find valid path\n");
+	// write(2, valid_path, 30);
+	// write(2, "\nhey\n", 5);
     return (valid_path);
 }
 
@@ -63,24 +65,28 @@ char  *attach_cmd(char *valid_path, char **cmd)
 	i = 0;
 	n = 0;
 	cmd_len = 0;
+	
+	write(2, valid_path, 30);
+	write(2, "\nhey\n", 5);
 	// i is len of path
 	while (valid_path[i] != '\0')
 		i++;
-    // printf("i: %d\n", i);
-    // printf("valid path: %s\n", valid_path);
+		
+	
 	// k is the len of the first argument
     // printf("cmd[0]: %s\n", cmd[0]);
 	cmd_len = ft_strlen(cmd[0]);
     // printf("check att cmd\n");
     // printf("k: %d\n", k);
-	tmp_file = malloc(i + cmd_len + 1);
+	tmp_file = calloc(i + cmd_len + 1, sizeof(char));
 	while (valid_path[n] != '\0')
 	{
 		tmp_file[n] = valid_path[n];
 		n++;
 	}
 	i = 0;
-	tmp_file[n++] = '/';
+	tmp_file[n] = '/';
+	n++;
     // printf("tmp: %s\n", tmp_file);
 	while (cmd_len >= i)
 	{
@@ -90,7 +96,17 @@ char  *attach_cmd(char *valid_path, char **cmd)
 		n++;
         // printf("n: %d\n", n);
 	}
-	tmp_file[n] = '\0';
+	tmp_file[n] ='\0';
+	// n++;
+	// tmp_file[n] = 0;
+	// int len = ft_strlen(tmp_file);
+	// char convert[1];
+	// convert[0] = len + 20;
+	// write(2, "\n", 2);
+	// write(2, convert, 1);
+	// write(2, "\n", 2);
+	// write(2, tmp_file, 27);
+	// write(2, "\n", 2);
     // printf("tmp_file: %s\n", tmp_file);
     free(valid_path);
 	if (tmp_file == NULL)

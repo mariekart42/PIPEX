@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 13:07:55 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 18:00:43 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 23:06:11 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,9 @@ void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
 
     
     // open outfile we need to:
-	// O_RDWR	-> read and write
-	// O_CREAT	-> create if it doesn't exist
-	// O_TRUNC	-> len always truncated to 0
-	// 0644		-> files owner can read and write, the others only read -> isn't that kinda O_RDWR? try to delete later
-	file[0] = open(argv[3], O_RDWR | O_CREAT | O_TRUNC | 0644);
+	// O_RDONLY	-> read only
+	// 0644		-> files owner can read and write, the others only read
+	file[0] = open(argv[1], O_RDONLY | 0644);
     
     // checking if infile is correct
     if (file[0] < 0)
@@ -42,12 +40,22 @@ void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
 
     // 2d array of all commands + NULL-terminated
     cmd_1 = ft_split(argv[2], ' ');
-
+	
     // infile path is a valid path that get figured out in 'get_path'
     // and then the first command in cmd_1 gets attached at the end 
     infile_path = attach_cmd(get_path(envp), cmd_1);
     // printf("infile peth: %s\n", infile_path);
 	
+	
+write(2, infile_path, 30);
+write(2, "\n", 1);
+char con[1];
+int len = access(infile_path, F_OK | X_OK);
+con[0] = len + 50;
+write(2, "\n", 1);
+write(2, con, 1);
+write(2, "\n", 1);
+printf("access: %d\n", access(infile_path, F_OK | X_OK));
 	// now we can execute the cmd1
 	if(execve(infile_path, cmd_1, envp) == -1)
 		error_msg("Error: unable to execute execve() in first child!\n");
@@ -89,6 +97,8 @@ void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
     outfile_path = attach_cmd(get_path(envp), cmd_2);
     // printf("outfile peth: %s\n", outfile_path);
 	
+	
+
 	// now we can execute the cmd1
 	if(execve(outfile_path, cmd_2, envp) == -1)
 		error_msg("Error: unable to execute execve() in second child!\n");
