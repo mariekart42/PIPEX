@@ -7,29 +7,30 @@ RM= rm -rf
 NAME = pipex
 #DEBUG = -fsanitize=address
 
-FILES=	main.c \
-		ft_split.c \
-		extra_funcs.c \
-		path.c \
-		pipex.c \
-		error.c
+LIBFT= libs/LIBFT/libft.a
+
+FILES=	funcs/main.c \
+		funcs/extra_funcs.c \
+		funcs/path.c \
+		funcs/pipex.c \
+		funcs/error.c
 
 O_FILES= $(FILES:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME): $(O_FILES) $(HEADER)
-	$(CC) $(CFLAGS) $(DEBUG) $(O_FILES) -o $(NAME)
+$(NAME): $(O_FILES)
+	$(MAKE) -C libs/LIBFT
+	$(CC) $(CFLAGS) $(DEBUG) $(O_FILES) $(LIBFT) -o $(NAME)
 
 clean:
+	$(MAKE) clean -C libs/LIBFT
 	$(RM) $(O_FILES)
 	
 fclean: clean
+	$(MAKE) fclean -C libs/LIBFT
 	$(RM) $(NAME)
 	
 re: fclean all
 
-g:
-	@gcc -g -fsanitize=address $(FILES) $(CFLAGS)
-# -fsanitize=address
 .PHONY: all clean fclean re
