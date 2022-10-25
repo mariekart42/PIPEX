@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 17:26:01 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/25 11:23:21 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct	s_path
 }				t_path;
 
 
+
 //		ERROR.C
 void	error_msg(char *msg);
 void check_input(int argc);
@@ -64,10 +65,11 @@ void check_input(int argc);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void free_2d(char **array);
 char	*ft_strdup(char *src);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 //		PATH.C
-char    *get_path(char **envp);
-char  *attach_cmd(char *valid_path, char **cmd);
+char *get_path(char **envp, char **cmd);
+
 
 
 //		PIPEX.C

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 13:07:55 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 23:06:11 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/25 11:24:12 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
     
     // checking if infile is correct
     if (file[0] < 0)
-        error_msg("Failed to open file!\n");
+        error_msg("Failed to open file in first process!\n");
 
 	// p[1] here is our write end, so we dont need the read end
 	close(pipe[0]);
@@ -43,21 +43,14 @@ void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
 	
     // infile path is a valid path that get figured out in 'get_path'
     // and then the first command in cmd_1 gets attached at the end 
-    infile_path = attach_cmd(get_path(envp), cmd_1);
+    infile_path = get_path(envp, cmd_1);
     // printf("infile peth: %s\n", infile_path);
 	
 	
-write(2, infile_path, 30);
-write(2, "\n", 1);
-char con[1];
-int len = access(infile_path, F_OK | X_OK);
-con[0] = len + 50;
-write(2, "\n", 1);
-write(2, con, 1);
-write(2, "\n", 1);
-printf("access: %d\n", access(infile_path, F_OK | X_OK));
+
+
 	// now we can execute the cmd1
-	if(execve(infile_path, cmd_1, envp) == -1)
+	if (execve(infile_path, cmd_1, envp) == -1)
 		error_msg("Error: unable to execute execve() in first child!\n");
 	free(infile_path);
 }
@@ -72,11 +65,11 @@ void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
 	// O_CREAT	-> create if it doesn't exist
 	// O_TRUNC	-> len always truncated to 0
 	// 0777		-> full access lol
-	file[1] = open(argv[4], O_RDWR | O_CREAT | O_TRUNC | 0777);
+	file[1] = open(argv[4], O_RDWR | O_TRUNC | O_CREAT);//  | 0777);
     
     // checking if infile is correct
     if (file[1] < 0)
-        error_msg("Failed to open file!\n");
+        error_msg("Failed to open file in second child!\n");
 		
 	// p[0] here is our read end, so we dont need the write end
 	close(pipe[1]);
@@ -94,7 +87,7 @@ void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv)
 
     // outfile path is a valid path that get figured out in 'get_path'
     // and then the first command in cmd_2 gets attached at the end 
-    outfile_path = attach_cmd(get_path(envp), cmd_2);
+    outfile_path = get_path(envp, cmd_2);
     // printf("outfile peth: %s\n", outfile_path);
 	
 	

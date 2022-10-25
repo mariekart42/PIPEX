@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 12:54:08 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/24 15:44:20 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/10/24 23:23:22 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,45 @@ char	*ft_strdup(char *src)
 		i++;
 	}
 	ptr[i] = '\0';
+	free(src);
+	return (ptr);
+}
+
+/**
+ * @brief function connects to given strings and allocates
+ * memory for them with malloc
+ * 
+ * @param s1 fist string
+ * @param s2 second string
+ * @return char pointer to allocated memory space
+ */
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*ptr;
+	int		i;
+	int		k;
+
+	if (!s1 || !s2)
+		return (NULL);
+	ptr = (char *) malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);
+	if (!ptr)
+		return (NULL);
+	k = 0;
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		ptr[i] = s1[i];
+		i++;
+	}
+	while (s2[k] != '\0')
+	{
+		ptr[i] = s2[k];
+		i++;
+		k++;
+	}
+	ptr[i] = '\0';
+	// free((void*)s1);
+	// free((void*)s2);
+	
 	return (ptr);
 }
