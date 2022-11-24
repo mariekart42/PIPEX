@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/24 16:37:02 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/24 20:39:36 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct s_ppx
 	int32_t pipe[2];
 	int32_t file[3];
 	int32_t amount_cmds;
+	char	**envp;
+	char	**argv;
 	
 }				t_ppx;
 
