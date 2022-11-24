@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/25 13:38:12 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/24 16:37:02 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+typedef struct s_ppx
+{
+	int32_t pipe[2];
+	int32_t file[3];
+	int32_t amount_cmds;
+	
+}				t_ppx;
 
 //		ERROR.C
 void	error_msg(char *msg);
@@ -54,6 +61,9 @@ char *get_path(char **envp, char **cmd);
 void pipex(int32_t file[], int32_t pipe[], char **argv, char **envp);
 void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
+
+//		bonus.c
+void count_commands(t_ppx *ppx, int32_t argc);
 
 #endif
 
