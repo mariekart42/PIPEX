@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/24 20:58:02 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/25 13:01:21 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	main(int argc, char *argv[], char **envp)
 	// if (pipe(ppx.pipe) < 0)
 	// 	error_msg("failed to open pipe!\n");
 
-	pipex(&data, argv, envp);
 
 
 

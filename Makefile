@@ -12,9 +12,9 @@ LIBFT= libs/LIBFT/libft.a
 FILES=	funcs/main.c \
 		funcs/extra_funcs.c \
 		funcs/path.c \
-		funcs/pipex.c \
 		funcs/error.c \
 		funcs/bonus.c
+# funcs/pipex.c \
 
 O_FILES= $(FILES:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/24 20:39:36 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/25 14:29:07 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,12 @@ typedef struct s_ppx
 {
 	int32_t pipe[2];
 	int32_t file[3];
+	int32_t next_file;
 	int32_t amount_cmds;
 	char	**envp;
 	char	**argv;
+	char	**cmd;
+	// char	*outfile_path;
 	
 }				t_ppx;
 
@@ -60,12 +63,18 @@ char *get_path(char **envp, char **cmd);
 
 
 //		PIPEX.C
-void pipex(int32_t file[], int32_t pipe[], char **argv, char **envp);
-void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
-void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
+// void pipex(int32_t file[], int32_t pipe[], char **argv, char **envp);
+// void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
+// void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 
 //		bonus.c
 void count_commands(t_ppx *ppx, int32_t argc);
+void handle_cmd(t_ppx *ppx);
+void handle_first_cmd(t_ppx *ppx);
+void handle_last_cmd(t_ppx *ppx);
+void pipe_cmd(t_ppx *ppx, int32_t cmd_num);
+void pipex(t_ppx *ppx);
+
 
 #endif
 
