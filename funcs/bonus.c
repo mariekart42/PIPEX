@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 15:16:54 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/26 16:30:00 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/26 22:26:38 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,10 +138,11 @@ void count_commands(t_ppx *ppx, int32_t argc)
 // }
 
 
-void execute_cmd(t_ppx *ppx, int32_t cmd_num)
+void execute_cmd(t_ppx *ppx, int32_t cmd_num, char **cmd)
 {
 	char	*cmd_path;
-	
+
+
 	// p[1] here is our write end, so we dont need the read end
 	// close(ppx->pipe[0]);
 	// close(ppx->prev_[0]);
@@ -162,6 +163,10 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 	else
 		dup2(ppx->save_prev_pipe_end, STDIN_FILENO);
 		
+	// outfile path is a valid path that get figured out in 'get_path'
+    // and then the first command in cmd gets attached at the end 
+    cmd_path = get_path(ppx->envp, cmd);
+	
 	// instead of printing the output of the first cmd now to the terminal (stdout), we redirect (via fd)
 	// the output to writing end of our pipe (p[1])
 	// -> except for the last cmd, ther we redirect the writing end to the outfile (-2 cause cmd_num starts from 0)
@@ -174,33 +179,20 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 	}
 		
 	
-	// outfile path is a valid path that get figured out in 'get_path'
-    // and then the first command in cmd gets attached at the end 
-    cmd_path = get_path(ppx->envp, ppx->cmd);
+	// // outfile path is a valid path that get figured out in 'get_path'
+    // // and then the first command in cmd gets attached at the end 
+    // cmd_path = get_path(ppx->envp, ppx->cmd);
 	
-	// now we can execute the cmd
-	if (execve(cmd_path, ppx->cmd, ppx->envp) == -1)
+	if (execve(cmd_path, cmd, ppx->envp) == -1)
 		error_msg("Error: unable to execute execve() in second child!\n");
 }
 
-// void redirect(t_ppx *ppx, int32_t cmd_num)
-// {
-// 	// if very first cmd read end from pipe needs to be infile -> already did this in open_file
-// 	// otherwise the write end from the prev pipe
-// 	if (cmd_num == 0)
-// 	{
-// 		execute_cmd(ppx, cmd_num);
-// 	}
-// 	else
-// 	{
-// 	}
-// }
 
 void pipex(t_ppx *ppx)
 {
 	int32_t cmd_num = 1;
 	int32_t pid = 0;
-	
+	char	**cmd;
 	
 	// if (pipe(ppx->prev_) < 0)
 	// 	error_msg("failed to open pipe!\n");
@@ -218,10 +210,13 @@ void pipex(t_ppx *ppx)
 		pid = fork();
 		if (pid == 0)
 		{
-			// redirect(ppx, cmd_num);
-			execute_cmd(ppx, cmd_num);
+			// 2d array of all commands + NULL-terminated
+			cmd = ft_split(ppx->av[cmd_num+1], ' ');
+			printf("\nav[cmd+1]: %s\n\n", ppx->av[cmd_num+1]);
+			execute_cmd(ppx, cmd_num, cmd);
 		}
 		cmd_num++;
+	printf("end\n");
 		waitpid(pid, NULL, 0);
 	}
 	close(ppx->file[0]);

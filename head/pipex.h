@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/26 16:06:04 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/26 22:21:10 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_ppx
 	int32_t amount_cmds;
 	char	**envp;
 	char	**av;
-	char	**cmd;
+	// char	**cmd;
 	int32_t save_prev_pipe_end;
 	// int32_t	prev_;
 	// char	*outfile_path;
@@ -70,7 +70,7 @@ char *get_path(char **envp, char **cmd);
 // void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 
 //		bonus.c
-void execute_cmd(t_ppx *ppx, int32_t cmd_num);
+void execute_cmd(t_ppx *ppx, int32_t cmd_num, char **cmd);
 void pipex(t_ppx *ppx);
 void count_commands(t_ppx *ppx, int32_t argc);
 void open_file(t_ppx *ppx, int32_t ac);

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 01:27:29 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/06 23:15:08 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/26 20:24:14 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*ptr;
 	int		i;
 	int		k;
-
 	if (!s1 || !s2)
 		return (NULL);
 	ptr = (char *) malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);

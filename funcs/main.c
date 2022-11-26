@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/26 15:50:46 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/26 20:53:59 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ int	main(int ac, char *av[], char **envp)
 {
 	t_ppx	ppx;
 	
+
 	check_input(ac);
 	ppx.av = av;
 	ppx.envp = envp;
+
 	count_commands(&ppx, ac);
 	// printf("amount commands: %d\n", ppx.amount_cmds);
 	open_file(&ppx, ac);

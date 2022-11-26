@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/10/25 13:26:19 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/26 22:24:22 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,24 @@ char *get_path(char **envp, char **cmd)
 	int		k;
 	char	**splitted_path;
     char    *valid_path;
-    
+
+
 	i = 0;
 	k = 0;
 	while (ft_strncmp(envp[i], "PATH=/", 6) != 0)
+	{
+	// printf("brrr: %s\n", envp[i]);
 		i++;
+	}
 	// iterate trough path and return path as soon as it is valid
     // +5 cause we dont want the "PATH=" but the first "/"
 	splitted_path = ft_split(envp[i] + 5, ':');
 	while (splitted_path[k] != NULL)
 	{
 		splitted_path[k] = ft_strjoin(splitted_path[k], "/");
+
 		valid_path = ft_strjoin(splitted_path[k], cmd[0]);
-		// printf("valid path: %s \t\t-> access: %d\n", valid_path, access(valid_path, F_OK | X_OK));
+
 		if (access(valid_path, F_OK | X_OK) == 0)
 			break;
 		free(valid_path);
@@ -46,5 +51,11 @@ char *get_path(char **envp, char **cmd)
 	}
 	if (access(valid_path, F_OK | X_OK) != 0)
 		error_msg("unable to find valid path!\n");
+		
+	if (*splitted_path)
+		free(*splitted_path);
+	if (splitted_path)
+		free(splitted_path);
+		
 	return (valid_path);
 }
