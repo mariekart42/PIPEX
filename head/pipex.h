@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/26 22:21:10 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/27 13:30:41 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 // open function
 #include <sys/stat.h>
 #include <fcntl.h>
+
+
+#define MAX_FD 1024
 
 typedef struct s_ppx
 {
@@ -69,11 +72,16 @@ char *get_path(char **envp, char **cmd);
 // void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 // void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
 
-//		bonus.c
-void execute_cmd(t_ppx *ppx, int32_t cmd_num, char **cmd);
-void pipex(t_ppx *ppx);
+// //		bonus.c
+// void execute_cmd(t_ppx *ppx, int32_t cmd_num, char **cmd);
+// void pipex(t_ppx *ppx);
+// void count_commands(t_ppx *ppx, int32_t argc);
+// void open_files(t_ppx *ppx, int32_t ac);
+
+//		pipex.c
+void open_files(t_ppx *ppx, int32_t ac);
+void open_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
 void count_commands(t_ppx *ppx, int32_t argc);
-void open_file(t_ppx *ppx, int32_t ac);
 
 
 
