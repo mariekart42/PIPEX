@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:17:16 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/27 14:23:56 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/27 16:12:10 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
  * function counts the amount of commands
  * later add option to count commands with including heredoc
  */
-void count_commands(t_ppx *ppx, int32_t argc)
+void count_commands(t_ppx *ppx, int32_t ac)
 {
-	ppx->amount_cmds = argc - 3;
-
+	ppx->amount_cmds = ac - 3;
+printf("am of processes: %d\n", ppx->amount_cmds);
 // count commads if heredoc
 
 }
@@ -57,11 +57,11 @@ void execute_cmd(t_ppx *ppx, char **cmd)
 
 	path = get_path(ppx->envp, cmd);
 
-fprintf(stderr, "cmd: %s\n", cmd[0]);	
-fprintf(stderr, "cmd: %s\n", cmd[1]);	
-fprintf(stderr, "cmd: %s\n\n", cmd[2]);	
+// fprintf(stderr, "cmd: %s\n", cmd[0]);	
+// fprintf(stderr, "cmd: %s\n", cmd[1]);	
+// fprintf(stderr, "cmd: %s\n\n", cmd[2]);	
 
-fprintf(stderr, "path: %s\n\n", path);
+// fprintf(stderr, "path: %s\n\n", path);
 
 	// now we can execute the cmd
 	if (execve(path, cmd, ppx->envp) == -1)
@@ -108,13 +108,12 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t pids[MAX_FD])
 		cmd_num++;
 		i++;
 	}
-	close_pipes(ppx, pipes);
-	waitpid(-1, NULL, 0);
 	// execute last to outfile
 	dup2(pipes[i-1][1], STDIN_FILENO);
 	dup2(ppx->file[1], STDOUT_FILENO);
 	cmd = ft_split(ppx->av[cmd_num+1], ' ');
 	execute_cmd(ppx, cmd);
+	waitpid(-1, NULL, 0);
 	close_pipes(ppx, pipes);
 }
 
@@ -133,10 +132,23 @@ int	main(int ac, char *av[], char **envp)
 	open_files(&ppx, ac);
 	open_pipes(&ppx, pipes);
 	
-	pipex(&ppx, pipes, pids);
+	// printing pipes
+	fprintf(stderr, "pipe: %d\n", pipes[0][0]);
+	fprintf(stderr, "pipe: %d\n", pipes[0][1]);
+	fprintf(stderr, "pipe: %d\n", pipes[1][0]);
+	fprintf(stderr, "pipe: %d\n", pipes[1][1]);
+	fprintf(stderr, "pipe: %d\n", pipes[2][0]);
+	fprintf(stderr, "pipe: %d\n\n", pipes[2][1]);
+	fprintf(stderr, "file 0: %d\n", ppx.file[0]);
+	fprintf(stderr, "file 1: %d\n", ppx.file[1]);
 
-	close(ppx.file[0]);
-	close(ppx.file[1]);
+	pipex(&ppx, pipes, pids);
+	
+
+	if (ppx.file[0])
+		close(ppx.file[0]);
+	if (ppx.file[1])
+		close(ppx.file[1]);
 
 
 	return (0);
