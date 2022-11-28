@@ -13,7 +13,8 @@ FILES=	funcs/main.c \
 		funcs/extra_funcs.c \
 		funcs/path.c \
 		funcs/error.c \
-		funcs/pipex.c
+		funcs/pipex.c \
+		funcs/here_doc.c
 
 O_FILES= $(FILES:%.c=%.o)
 

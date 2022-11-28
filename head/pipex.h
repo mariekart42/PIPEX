@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 15:16:32 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/28 18:49:44 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,15 @@
 
 typedef struct s_ppx
 {
-	// int32_t pipe[2];
 	int32_t file[2];
-	int32_t next_file;
 	int32_t amount_cmds;
 	char	**envp;
 	char	**av;
-	// char	**cmd;
-	int32_t save_prev_pipe_end;
-	// int32_t	prev_;
-	// char	*outfile_path;
-	
+	bool	here_doc;
 }				t_ppx;
 
 //		ERROR.C
 void	error_msg(char *msg);
-// void check_input(int ac);
 
 
 //		EXTRA_FUNCS.C
@@ -66,17 +59,6 @@ void free_2d(char **array);
 //		PATH.C
 char *get_path(char **envp, char **cmd);
 
-
-//		PIPEX.C
-// void pipex(int32_t file[], int32_t pipe[], char **argv, char **envp);
-// void	second_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
-// void	first_process(int32_t file[], int32_t pipe[], char **envp, char **argv);
-
-// //		bonus.c
-// void execute_cmd(t_ppx *ppx, int32_t cmd_num, char **cmd);
-// void pipex(t_ppx *ppx);
-// void count_commands(t_ppx *ppx, int32_t argc);
-// void open_files(t_ppx *ppx, int32_t ac);
 
 //		pipex.c
 void open_files(t_ppx *ppx, int32_t ac);

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/26 22:24:22 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/28 21:26:19 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,11 @@ char *get_path(char **envp, char **cmd)
 	char	**splitted_path;
     char    *valid_path;
 
-
 	i = 0;
 	k = 0;
 	while (ft_strncmp(envp[i], "PATH=/", 6) != 0)
-	{
-	// printf("brrr: %s\n", envp[i]);
 		i++;
-	}
+		
 	// iterate trough path and return path as soon as it is valid
     // +5 cause we dont want the "PATH=" but the first "/"
 	splitted_path = ft_split(envp[i] + 5, ':');
