@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:20:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 12:21:22 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/28 14:50:33 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void open_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 	// for 3 cmds we need 2 pipes
 	while (i+1 < ppx->amount_cmds)
 	{
-		// printf("pipe: %d\n", i);
 		if (pipe(pipes[i]) < 0)
 			error_msg("Failed to open pipe\n");
 		i++;
@@ -75,12 +74,6 @@ void execute_cmd(t_ppx *ppx, char **cmd)
 	char *path;
 
 	path = get_path(ppx->envp, cmd);
-
-// fprintf(stderr, "cmd: %s\n", cmd[0]);	
-// fprintf(stderr, "cmd: %s\n", cmd[1]);	
-// fprintf(stderr, "cmd: %s\n\n", cmd[2]);
-
-// fprintf(stderr, "path: %s\n\n", path);
 
 	// now we can execute the cmd
 	if (execve(path, cmd, ppx->envp) == -1)
@@ -103,28 +96,25 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 		pid = fork();
 		if (pid == 0)
 		{
-		// printf("while loo[p]\n");
 			if (cmd_num == 1)
 			{
-				// fprintf(stderr, "reading from file[0]\nwriting to pipe[0][1]\n\n");
+				fprintf(stderr, "reading from file[0]\nwriting to pipe[0][1]\n\n");
 				dup2(ppx->file[0], STDIN_FILENO);
 				dup2(pipes[0][1], STDOUT_FILENO);
 				close_pipes(ppx, pipes);
-
 			}
-			else if (cmd_num-1 == ppx->amount_cmds)
+			else if (cmd_num == ppx->amount_cmds)
 			{
-				// fprintf(stderr, "reading from pipe[i=%i -1][0]\nwriting to pipe[i][1]\n\n", i);
+				fprintf(stderr, "reading from pipe[i-1=%d][0]\nwriting to file[1]\n\n", i-1);
 				dup2(pipes[i-1][0], STDIN_FILENO);
-				dup2(pipes[i][1], STDOUT_FILENO);
+				dup2(ppx->file[1], STDOUT_FILENO);
 				close_pipes(ppx, pipes);
 			}
 			else
 			{
-				
-				// fprintf(stderr, "reading from pipe[i=%d -1][0]\nwriting to file[1]\n\n", i);
+				fprintf(stderr, "reading from pipe[i-1=%i][0]\nwriting to pipe[i][1]\n\n", i-1);
 				dup2(pipes[i-1][0], STDIN_FILENO);
-				dup2(ppx->file[1], STDOUT_FILENO);
+				dup2(pipes[i][1], STDOUT_FILENO);
 				close_pipes(ppx, pipes);
 			}
 			cmd = ft_split(ppx->av[cmd_num+1], ' ');
@@ -133,9 +123,10 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 		}
 		cmd_num++;
 		i++;
+		// wait(NULL);
 		// printf("cmd_num: %d\ni: %d\n\n", cmd_num, i);
 	}
-	waitpid(pid, NULL, 0);
+	// waitpid(pid, NULL, 0);
 	close_pipes(ppx, pipes);
 	// close_pipes(ppx, pipes);
 }
