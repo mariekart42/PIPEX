@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 10:43:21 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/28 15:16:32 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_ppx
 
 //		ERROR.C
 void	error_msg(char *msg);
-void check_input(int ac);
+// void check_input(int ac);
 
 
 //		EXTRA_FUNCS.C
@@ -83,8 +83,9 @@ void open_files(t_ppx *ppx, int32_t ac);
 void open_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
 void count_commands(t_ppx *ppx, int32_t argc);
 void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
-void execute_cmd(t_ppx *ppx, char **cmd);
-void close_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
+void execute_cmd(t_ppx *ppx, int32_t cmd_num);
+void close_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
+void redirect(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t i);
 
 
 
