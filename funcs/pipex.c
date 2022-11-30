@@ -6,23 +6,69 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:20:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 21:29:59 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/29 15:33:23 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../head/pipex.h"
 
+/*
+ * function opens either 'infile' (as input from the terminal) 
+ * or an 'tmp.hd' file if 'here_doc' is passed as an argument to the commandline
+ * in both cases, function opens outfile, where the result of the commands
+ * will be piped to
+ */
+void open_files(t_ppx *ppx)
+{
+	if (ppx->here_doc == false)
+	{
+		ppx->file[0] = open(ppx->av[1], O_RDONLY, 0666);
+		if (ppx->file[0] < 0)
+			error_msg("Failed to open infile!\n");
+	}
+	else
+	{
+		ppx->file[0] = open(".hd", O_TRUNC | O_CREAT | O_WRONLY, 0000644);
+		if (ppx->file[0] < 0)
+			error_msg("Failed to open tmp.hd!\n");
+	}
+	ppx->file[1] = open(ppx->av[ppx->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+    if (ppx->file[1] < 0)
+        error_msg("Failed to open outfile!\n");
+}
+
+/*
+ * function opens as many pipes as command passed as an argument to the commandline
+ * minus one
+ * also open_file function gets called to open in- and outfile
+ */
+void open_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
+{
+	int32_t i;
+	
+	i = 0;
+	while (i + 1 < ppx->amount_cmds)
+	{
+		if (pipe(pipes[i]) < 0)
+			error_msg("Failed to open pipe\n");
+		i++;
+	}
+	open_files(ppx);
+}
+
 void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 {
 	ppx->av = av;
 	ppx->envp = envp;
-	if (ft_strncmp(av[1], "here_doc", 8))
+	ppx->ac = ac;
+	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 	{
 		printf("its a heredoc!\n");
 		if (ac < 6)
 		{
 			write(STDERR_FILENO, "invalid input! usage: ", 22);
-			write("'here_doc' <LIMITER> <cmd> ... <cmd> <outfile>\n", 48);
+			write(STDERR_FILENO, \
+			"./pipex 'here_doc' <LIMITER> <cmd> ... <cmd> <outfile>\n", 56);
 			exit(EXIT_FAILURE);
 		}
 		ppx->amount_cmds = ac - 4;
@@ -34,7 +80,8 @@ void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 		if (ac < 5)
 		{
 			write(STDERR_FILENO, "invalid input! usage: ", 22);
-			write("<infile> <cmd> ... <cmd> <outfile>\n", 44);
+			write(STDERR_FILENO, \
+			"./pipex <infile> <cmd> ... <cmd> <outfile>\n", 44);
 			exit(EXIT_FAILURE);
 		}
 		ppx->amount_cmds = ac - 3;
@@ -59,47 +106,6 @@ void close_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 		close(ppx->file[0]);
 	if (ppx->file[1])
 		close(ppx->file[1]);
-}
-
-/*
- * function opens either 'infile' (as input from the terminal) 
- * or an 'tmp.hd' file if 'here_doc' is passed as an argument to the commandline
- * in both cases, function opens outfile, where the result of the commands
- * will be piped to
- */
-void open_files(t_ppx *ppx, int32_t ac)
-{
-	if (ppx->here_doc == false)
-	{
-		ppx->file[0] = open(ppx->av[1], O_RDONLY, 0666);
-		if (ppx->file[0] < 0)
-			error_msg("Failed to open infile!\n");
-	}
-	else
-	{
-		ppx->file[0] = open(".hd", O_TRUNC | O_CREAT | O_WRONLY, 0000644);
-		if (ppx->file[0] < 0)
-			error_msg("Failed to open tmp.hd!\n");
-	}
-	ppx->file[1] = open(ppx->av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-    if (ppx->file[1] < 0)
-        error_msg("Failed to open outfile!\n");
-}
-
-/*
- * function opens as many pipes as command passed as an argument to the commandline
- * minus one
- */
-void open_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2])
-{
-	int32_t i = 0;
-	
-	while (i + 1 < ppx->amount_cmds)
-	{
-		if (pipe(pipes[i]) < 0)
-			error_msg("Failed to open pipe\n");
-		i++;
-	}
 }
 
 /*
@@ -179,5 +185,4 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 		i++;
 	}
 	waitpid(-1, NULL, 0);
-	close_fds(ppx, pipes);
 }

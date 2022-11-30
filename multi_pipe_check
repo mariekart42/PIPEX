@@ -1,0 +1,12 @@
+total 152
+-rw-r--r--   1 mariemensing  staff     25 29 Nov 14:45 A
+-rw-r--r--   1 mariemensing  staff     25 29 Nov 14:45 B
+-rw-r--r--   1 mariemensing  staff    628 29 Nov 15:00 Makefile
+-rw-r--r--   1 mariemensing  staff     59 29 Nov 15:33 OUTYYY
+drwxr-xr-x  17 mariemensing  staff    544 29 Nov 15:33 funcs
+drwxr-xr-x   3 mariemensing  staff     96 29 Nov 14:45 head
+drwxr-xr-x   4 mariemensing  staff    128 29 Nov 15:02 include
+-rw-r--r--   1 mariemensing  staff      9 23 Okt 11:38 infile
+-rw-r--r--   1 mariemensing  staff      0 29 Nov 15:35 multi_pipe_check
+-rwxr-xr-x   1 mariemensing  staff  53168 29 Nov 15:33 pipex
+-rw-r--r--   1 mariemensing  staff      9 29 Nov 15:33 tmp.hd

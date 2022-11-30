@@ -6,15 +6,18 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 18:49:44 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/29 15:33:18 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef PIPEX_H
 #define PIPEX_H
 
+// for get_next_line
+# define BUFFER_SIZE 1
+
 // libft
-# include "../libs/LIBFT/libft.h"
+# include "../include/libft/libft.h"
 
 # include <stdbool.h> // bool stuff
 # include <limits.h>
@@ -45,8 +48,15 @@ typedef struct s_ppx
 	int32_t amount_cmds;
 	char	**envp;
 	char	**av;
+	int32_t	ac;
 	bool	here_doc;
 }				t_ppx;
+
+//		../include/get_next_line/get_next_line.c
+void	buff_after_line(char *buff);
+char	*create_last(char *buff, char *line);
+char	*get_next_line(int fd);
+
 
 //		ERROR.C
 void	error_msg(char *msg);
@@ -60,15 +70,18 @@ void free_2d(char **array);
 char *get_path(char **envp, char **cmd);
 
 
-//		pipex.c
-void open_files(t_ppx *ppx, int32_t ac);
-void open_pipes(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
-void count_commands(t_ppx *ppx, int32_t argc);
-void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
-void execute_cmd(t_ppx *ppx, int32_t cmd_num);
+//		../funcs/pipex.c
+void open_files(t_ppx *ppx);
+void open_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
+void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp);
 void close_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
+void execute_cmd(t_ppx *ppx, int32_t cmd_num);
 void redirect(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t i);
+void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
 
+
+//		../funcs/here_doc.c
+void here_doc(t_ppx *ppx);
 
 
 #endif
