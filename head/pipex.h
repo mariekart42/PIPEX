@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/29 15:33:18 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/30 13:02:13 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@
 # include <string.h>
 
 // perror handling
-#include <errno.h> 
+# include <errno.h> 
 
 // open function
-#include <sys/stat.h>
-#include <fcntl.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 
 #define MAX_FD 1024

@@ -6,18 +6,16 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:20:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/29 15:33:23 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/30 15:26:28 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../head/pipex.h"
 
-/*
- * function opens either 'infile' (as input from the terminal) 
- * or an 'tmp.hd' file if 'here_doc' is passed as an argument to the commandline
+/* function opens either 'infile' (as input from the terminal) or an 'tmp.hd' 
+ * file if 'here_doc' is passed as an argument to the commandline
  * in both cases, function opens outfile, where the result of the commands
- * will be piped to
- */
+ * will be piped to */
 void open_files(t_ppx *ppx)
 {
 	if (ppx->here_doc == false)
@@ -28,7 +26,7 @@ void open_files(t_ppx *ppx)
 	}
 	else
 	{
-		ppx->file[0] = open(".hd", O_TRUNC | O_CREAT | O_WRONLY, 0000644);
+		ppx->file[0] = open(".hd", O_TRUNC | O_CREAT | O_WRONLY, 0777);
 		if (ppx->file[0] < 0)
 			error_msg("Failed to open tmp.hd!\n");
 	}
@@ -37,21 +35,28 @@ void open_files(t_ppx *ppx)
         error_msg("Failed to open outfile!\n");
 }
 
-/*
- * function opens as many pipes as command passed as an argument to the commandline
- * minus one
- * also open_file function gets called to open in- and outfile
- */
+/* if the here_doc action is called in the command line, function opens one pipe
+ * if the here_doc action is NOT called in the command line, function opens as 
+ * many pipes as command passed as an argument to the commandline minus one
+ * also open_file function gets called to open in- and outfile (in both cases) */
 void open_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 {
 	int32_t i;
 	
 	i = 0;
-	while (i + 1 < ppx->amount_cmds)
+	if (ppx->here_doc == true)
 	{
-		if (pipe(pipes[i]) < 0)
+		if (pipe(pipes[0]) < 0)
 			error_msg("Failed to open pipe\n");
-		i++;
+	}
+	else
+	{
+		while (i + 1 < ppx->amount_cmds)
+		{
+			if (pipe(pipes[i]) < 0)
+				error_msg("Failed to open pipe\n");
+			i++;
+		}
 	}
 	open_files(ppx);
 }
@@ -71,7 +76,7 @@ void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 			"./pipex 'here_doc' <LIMITER> <cmd> ... <cmd> <outfile>\n", 56);
 			exit(EXIT_FAILURE);
 		}
-		ppx->amount_cmds = ac - 4;
+		ppx->amount_cmds = 2;
 		ppx->here_doc = true;
 	}
 	else
@@ -89,9 +94,7 @@ void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 	}
 }
 
-/*
- * function closes all open pipe-fds and the two open files
- */
+/* function closes all open pipe-fds and the in- and outfile */
 void close_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 {
 	int32_t i = 0;
@@ -108,18 +111,16 @@ void close_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 		close(ppx->file[1]);
 }
 
-/*
- * function gets the path from 'get_path' and executes the command
- */
+/* function gets the path from 'get_path' and executes the command */
 void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 {
-	char *path;
+	char	*path;
 	char	**cmd;
 
 	if (ppx->here_doc == false)
-		cmd = ft_split(ppx->av[cmd_num+1], ' ');
+		cmd = ft_split(ppx->av[cmd_num + 1], ' ');
 	else
-		cmd = ft_split(ppx->av[cmd_num+2], ' ');
+		cmd = ft_split(ppx->av[cmd_num + 2], ' ');
 	path = get_path(ppx->envp, cmd);
 
 	// now we can execute the cmd
@@ -128,8 +129,7 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 	free(path);
 }
 
-/*
- * function redirects STDIN and STDOUT to either a file or a pipe
+/* function redirects STDIN and STDOUT to either a file or a pipe
  * - for the first command, we get the input for the command not from STDIN_FILENO
  * 		but from our preinitialized infile (-> file[0])
  * - the last command gets redirected from STDOUT_FILENO to outfile (->file[0])
@@ -144,8 +144,7 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
  *				   |	  |	  ----------  |       |         outfile
  *       		    --> -->                <-- <--
  *				   writes to		      reads from
-				READ_END of pipe	   WRITE_END of pipe
- *
+ *				READ_END of pipe	   WRITE_END of pipe
  */
 void redirect(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t i)
 {
@@ -174,6 +173,7 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 	pid = 0;
 	while (i < ppx->amount_cmds)
 	{
+		printf("yes\n");
 		pid = fork();
 		if (pid == 0)
 		{

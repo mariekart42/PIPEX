@@ -6,20 +6,20 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/28 21:26:19 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/11/30 13:25:45 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../head/pipex.h"
 
-// checking path:
-// with "env | grep PATH" you get your current path
-// eg.: PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
-// now check validity for each part of the path (execve doesnt know where we are)
-// eg. it could be path: "/usr/local/bin"
-// if this is not valid we iterate through the next one and check for vality
-// eg access("/usr/bin")
-// if thats still not valid access("/bin") and so on
+/* checking path:
+ * with "env | grep PATH" you get your current path
+ * eg.: PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+ * now check validity for each part of the path
+ * eg. it could be path: "/usr/local/bin"
+ * if this is not valid we iterate through the next one and check for vality
+ * eg access("/usr/bin")
+ * if thats still not valid access("/bin") and so on */
 char *get_path(char **envp, char **cmd)
 {
 	int     i;
