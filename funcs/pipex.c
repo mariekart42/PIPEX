@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:20:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/30 15:26:28 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/12/04 23:30:13 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,16 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 	else
 		cmd = ft_split(ppx->av[cmd_num + 2], ' ');
 	path = get_path(ppx->envp, cmd);
-
+	
 	// now we can execute the cmd
 	if (execve(path, cmd, ppx->envp) == -1)
-		error_msg("Error: unable to execute execve() in first child!\n");
+	{
+		write(2, "Command not found: ", 19);
+		ft_putstr_fd(ppx->av[3], 2);
+		write(2, "\n", 1);
+		write(2, "dd\n", 3);
+		exit(127);
+	}
 	free(path);
 }
 
@@ -167,7 +173,7 @@ void redirect(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t i)
 void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 {
 	int32_t i;
-	int32_t pid;
+	int32_t pid;// make it array
 	
 	i = 0;
 	pid = 0;
@@ -180,9 +186,19 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 			redirect(ppx, pipes, i);
 			close_fds(ppx, pipes);
 			execute_cmd(ppx, i + 1);
-			error_msg("Failed to execute command!");
+			// error_msg("Failed to execute command!");
 		}
 		i++;
 	}
-	waitpid(-1, NULL, 0);
+	
+	// implement here array of pid and wait for all of it
+	// &data->exit_status gives 127 if needed and in main the macro is setting it to the right number
+	while ((i < data->total_cmds) && (data->pid[i]))
+	{
+		waitpid(data->pid[i], &data->exit_status, 0);
+		i++;
+	}
+	// waitpid(-1, &ppx->status, 0);
+
+
 }

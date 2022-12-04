@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:19:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/30 13:25:45 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/12/04 22:27:07 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ char *get_path(char **envp, char **cmd)
 		free(valid_path);
 		k++;
 	}
-	if (access(valid_path, F_OK | X_OK) != 0)
-		error_msg("unable to find valid path!\n");
+	// if (access(valid_path, F_OK | X_OK) != 0)
+	// 	error_msg("unable to find valid path!\n");
 		
-	if (*splitted_path)
-		free(*splitted_path);
-	if (splitted_path)
-		free(splitted_path);
+	// if (*splitted_path)
+	// 	free(*splitted_path);
+	// if (splitted_path)
+	// 	free(splitted_path);
 		
 	return (valid_path);
 }

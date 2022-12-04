@@ -6,13 +6,13 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 21:00:29 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/30 16:15:26 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/12/02 15:41:47 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../head/pipex.h"
 
-void here_doc(t_ppx *ppx)
+void here_doc(t_ppx *ppx, int32_t pipe[MAX_FD][2])
 {
 	char	*buff;
 	int32_t	tmp_fd;
@@ -32,7 +32,7 @@ void here_doc(t_ppx *ppx)
 	}
 	// ppx->file[0] = tmp_fd;
 	close(tmp_fd);
-	close_fds(ppx);
+	close_fds(ppx, pipe);
 	
 	printf("lines: %s\n", get_next_line(tmp_fd));
 	printf("lines: %s\n", get_next_line(tmp_fd));

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:18:00 by mmensing          #+#    #+#             */
-/*   Updated: 2022/11/30 13:02:13 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/12/04 23:20:51 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 
 
 #define MAX_FD 1024
+#define CMD_NOT_FOUND 127
 
 typedef struct s_ppx
 {
@@ -50,6 +51,7 @@ typedef struct s_ppx
 	char	**av;
 	int32_t	ac;
 	bool	here_doc;
+	int32_t status;
 }				t_ppx;
 
 //		../include/get_next_line/get_next_line.c
@@ -81,7 +83,7 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
 
 
 //		../funcs/here_doc.c
-void here_doc(t_ppx *ppx);
+void here_doc(t_ppx *ppx, int32_t pipes[MAX_FD][2]);
 
 
 #endif
