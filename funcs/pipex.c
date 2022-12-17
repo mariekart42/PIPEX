@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 10:20:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/12/04 23:30:13 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/12/17 21:29:04 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,8 @@ void open_fds(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 
 void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 {
-	ppx->av = av;
-	ppx->envp = envp;
-	ppx->ac = ac;
 	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 	{
-		printf("its a heredoc!\n");
 		if (ac < 6)
 		{
 			write(STDERR_FILENO, "invalid input! usage: ", 22);
@@ -81,7 +77,6 @@ void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 	}
 	else
 	{
-		printf("its NOT a heredoc!\n");
 		if (ac < 5)
 		{
 			write(STDERR_FILENO, "invalid input! usage: ", 22);
@@ -92,6 +87,9 @@ void	check_and_init_data(t_ppx *ppx, int32_t ac, char **av, char **envp)
 		ppx->amount_cmds = ac - 3;
 		ppx->here_doc = false;
 	}
+	ppx->av = av;
+	ppx->envp = envp;
+	ppx->ac = ac;
 }
 
 /* function closes all open pipe-fds and the in- and outfile */
@@ -128,8 +126,6 @@ void execute_cmd(t_ppx *ppx, int32_t cmd_num)
 	{
 		write(2, "Command not found: ", 19);
 		ft_putstr_fd(ppx->av[3], 2);
-		write(2, "\n", 1);
-		write(2, "dd\n", 3);
 		exit(127);
 	}
 	free(path);
@@ -173,15 +169,17 @@ void redirect(t_ppx *ppx, int32_t pipes[MAX_FD][2], int32_t i)
 void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 {
 	int32_t i;
-	int32_t pid;// make it array
+	int32_t *pids;// make it array
 	
+	pids = malloc(sizeof(int32_t) * ppx->amount_cmds);
+	if (!pids)
+		error_msg("Error! Failed to malloc for pids!");
 	i = 0;
-	pid = 0;
 	while (i < ppx->amount_cmds)
 	{
-		printf("yes\n");
-		pid = fork();
-		if (pid == 0)
+		// printf("yes\n");
+		pids[i] = fork();
+		if (pids[i] == 0)
 		{
 			redirect(ppx, pipes, i);
 			close_fds(ppx, pipes);
@@ -193,12 +191,12 @@ void pipex(t_ppx *ppx, int32_t pipes[MAX_FD][2])
 	
 	// implement here array of pid and wait for all of it
 	// &data->exit_status gives 127 if needed and in main the macro is setting it to the right number
-	while ((i < data->total_cmds) && (data->pid[i]))
+	while ((i < ppx->amount_cmds) && (pids[i]))
 	{
-		waitpid(data->pid[i], &data->exit_status, 0);
+		waitpid(pids[i], &ppx->status, 0);
 		i++;
 	}
 	// waitpid(-1, &ppx->status, 0);
-
+	free(pids);
 
 }
